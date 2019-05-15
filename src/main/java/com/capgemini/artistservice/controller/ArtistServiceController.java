@@ -24,6 +24,10 @@ public class ArtistServiceController {
 	@Autowired
 	private ArtistService artistService;
 	
+
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	private String baseUrl = "http://localhost:8082/song";
 	
 	@PostMapping("/artist")
@@ -41,7 +45,6 @@ public class ArtistServiceController {
 	@GetMapping("/artist/{artistId}")
 	public ResponseEntity<Artist> getById(@PathVariable int artistId) {
 		Artist artist = artistService.getById(artistId);
-		RestTemplate restTemplate = new RestTemplate();
 		SongList songList = restTemplate.getForEntity(baseUrl + "/artist/" + artistId , SongList.class).getBody();
 		artist.setSongs(songList.getSongs());
 		return new ResponseEntity<Artist>(artist,HttpStatus.OK);	
